@@ -3,7 +3,7 @@ VRMのテクスチャを差し替えるやつ
 
 ## 見る所
 私が書いた部分は以下にまとめてます。  
-./Assets/Scripts
+https://github.com/xelloss120/VRM_TextureReplacer/tree/master/Assets/Scripts
 
 ## 使い方
 https://docs.google.com/presentation/d/1gel9JMAkESX6P66wBUv7TkdSbhhcyGlj24FQskpbi3Y/edit?usp=sharing
@@ -17,4 +17,4 @@ https://twitter.com/120byte
 本ソフトウェア作成者は一切の責任を負わないものとします。
 
 ## BOOTH
-https://120byte.booth.pm/items/2152326
+https://120byte.booth.pm/items/2177538
