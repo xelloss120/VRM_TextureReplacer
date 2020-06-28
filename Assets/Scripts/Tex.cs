@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,8 +19,8 @@ public class Tex : MonoBehaviour
         if (Vrm.VRM == null) return;
 
         var no = 0;
-        var meshes = Vrm.VRM.GetComponentsInChildren<SkinnedMeshRenderer>();
-        foreach (SkinnedMeshRenderer mesh in meshes)
+        var meshes = GetMeshArray();
+        foreach (Renderer mesh in meshes)
         {
             foreach (Material mat in mesh.materials)
             {
@@ -54,8 +55,8 @@ public class Tex : MonoBehaviour
         var path = Application.dataPath + "/../_Texture/";
 #endif
         var files = Directory.GetFiles(path, "*.png");
-        var meshes = Vrm.VRM.GetComponentsInChildren<SkinnedMeshRenderer>();
-        foreach (SkinnedMeshRenderer mesh in meshes)
+        var meshes = GetMeshArray();
+        foreach (Renderer mesh in meshes)
         {
             foreach (Material mat in mesh.materials)
             {
@@ -89,8 +90,8 @@ public class Tex : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        var meshes = Vrm.VRM.GetComponentsInChildren<SkinnedMeshRenderer>();
-        foreach (SkinnedMeshRenderer mesh in meshes)
+        var meshes = GetMeshArray();
+        foreach (Renderer mesh in meshes)
         {
             foreach (Material mat in mesh.materials)
             {
@@ -170,5 +171,19 @@ public class Tex : MonoBehaviour
         tex.LoadImage(img);
 
         return tex;
+    }
+
+    /// <summary>
+    /// MeshRendererとSkinnedMeshRendererをRenderer配列で取得
+    /// </summary>
+    Renderer[] GetMeshArray()
+    {
+        var meshesA = (Renderer[])Vrm.VRM.GetComponentsInChildren<MeshRenderer>();
+        var meshesB = (Renderer[])Vrm.VRM.GetComponentsInChildren<SkinnedMeshRenderer>();
+        var meshes = new Renderer[meshesA.Length + meshesB.Length];
+        Array.Copy(meshesA, meshes, meshesA.Length);
+        Array.Copy(meshesB, 0, meshes, meshesA.Length, meshesB.Length);
+
+        return meshes;
     }
 }
