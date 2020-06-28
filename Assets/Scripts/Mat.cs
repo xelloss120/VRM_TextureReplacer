@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class Mat : MonoBehaviour
 {
-    public string Name;
     public string Path;
 
     public Material Material;
@@ -21,9 +20,9 @@ public class Mat : MonoBehaviour
     public void Export()
     {
 #if UNITY_EDITOR
-        var path = Application.dataPath + "/../_exe/_Texture/" + Name + ".png";
+        var path = Application.dataPath + "/../_exe/_Texture/" + Material.name + ".png";
 #else
-        var path = VRM.Samples.FileDialogForWindows.SaveDialog("save Texture", Path + Name + ".png");
+        var path = VRM.Samples.FileDialogForWindows.SaveDialog("save Texture", Path + Material.name + ".png");
 #endif
         if (string.IsNullOrEmpty(path))
         {
@@ -43,7 +42,7 @@ public class Mat : MonoBehaviour
     public void Import()
     {
 #if UNITY_EDITOR
-        var path = Application.dataPath + "/../_exe/_Texture/" + Name + ".png";
+        var path = Application.dataPath + "/../_exe/_Texture/" + Material.name + ".png";
 #else
         var path = VRM.Samples.FileDialogForWindows.FileDialog("open Texture", ".png");
 #endif
