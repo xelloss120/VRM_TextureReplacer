@@ -17,4 +17,4 @@ https://twitter.com/120byte
 本ソフトウェア作成者は一切の責任を負わないものとします。
 
 ## BOOTH
-https://120byte.booth.pm/items/2177538
+https://120byte.booth.pm/items/2195473
