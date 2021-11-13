@@ -14,7 +14,7 @@ public class Export : MonoBehaviour
 #if UNITY_EDITOR
         var path = Application.dataPath + "/../_Debug/Export.vrm";
 #else
-        var path = VRM.Samples.FileDialogForWindows.SaveDialog("save VRM", Path);
+        var path = VRM.SimpleViewer.FileDialogForWindows.SaveDialog("save VRM", Path);
 #endif
         if (string.IsNullOrEmpty(path))
         {

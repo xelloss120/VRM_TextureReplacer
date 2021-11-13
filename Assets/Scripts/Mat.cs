@@ -22,7 +22,7 @@ public class Mat : MonoBehaviour
 #if UNITY_EDITOR
         var path = Application.dataPath + "/../_exe/_Texture/" + Material.name + ".png";
 #else
-        var path = VRM.Samples.FileDialogForWindows.SaveDialog("save Texture", Path + Material.name + ".png");
+        var path = VRM.SimpleViewer.FileDialogForWindows.SaveDialog("save Texture", Path + Material.name + ".png");
 #endif
         if (string.IsNullOrEmpty(path))
         {
@@ -44,7 +44,7 @@ public class Mat : MonoBehaviour
 #if UNITY_EDITOR
         var path = Application.dataPath + "/../_exe/_Texture/" + Material.name + ".png";
 #else
-        var path = VRM.Samples.FileDialogForWindows.FileDialog("open Texture", ".png");
+        var path = VRM.SimpleViewer.FileDialogForWindows.FileDialog("open Texture", ".png");
 #endif
         if (string.IsNullOrEmpty(path))
         {

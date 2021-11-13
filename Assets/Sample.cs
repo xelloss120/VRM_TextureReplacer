@@ -1,21 +1,25 @@
 ﻿using System.IO;
 using UnityEngine;
+using UniGLTF;
 using VRM;
 
 public class Sample : MonoBehaviour
 {
     VRMImporterContext Context;
+    RuntimeGltfInstance Loaded;
 
     void Start()
     {
         var path = @"D:\play\UnityProject\VRM_DollPlay2018\_exe\VRM\AoNana.vrm";
         var bytes = File.ReadAllBytes(path);
 
-        Context = new VRMImporterContext();
-        Context.ParseGlb(bytes);
+        var data = new GlbFileParser(path).Parse();
+        var vrm = new VRMData(data);
+        Context = new VRMImporterContext(vrm);
 
-        Context.Load();
-        Context.ShowMeshes();
+        Loaded = default(RuntimeGltfInstance);
+        Loaded = Context.Load();
+        Loaded.ShowMeshes();
     }
 
     byte[] tex2png(Texture tex)
@@ -46,7 +50,7 @@ public class Sample : MonoBehaviour
     public void Export()
     {
         var no = 0;
-        var meshes = Context.Root.GetComponentsInChildren<SkinnedMeshRenderer>();
+        var meshes = Loaded.Root.GetComponentsInChildren<SkinnedMeshRenderer>();
         foreach (SkinnedMeshRenderer mesh in meshes)
         {
             foreach (Material mat in mesh.materials)
@@ -74,7 +78,7 @@ public class Sample : MonoBehaviour
     {
         var no = 0;
         var files = Directory.GetFiles(@"_tex\", "*.png");
-        var meshes = Context.Root.GetComponentsInChildren<SkinnedMeshRenderer>();
+        var meshes = Loaded.Root.GetComponentsInChildren<SkinnedMeshRenderer>();
         foreach (SkinnedMeshRenderer mesh in meshes)
         {
             foreach (Material mat in mesh.materials)
