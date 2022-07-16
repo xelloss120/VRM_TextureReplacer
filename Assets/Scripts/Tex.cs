@@ -98,6 +98,7 @@ public class Tex : MonoBehaviour
                 var main = prefab.transform.Find("MainUI/MainColor").GetComponent<Image>();
                 var shade = prefab.transform.Find("MainUI/ShadeColor").GetComponent<Image>();
                 var outline = prefab.transform.Find("MainUI/OutlineColor").GetComponent<Image>();
+                var toggle = prefab.transform.Find("MainUI/Toggle").GetComponent<Toggle>();
                 var type = prefab.transform.Find("MainUI/Dropdown").GetComponent<Dropdown>();
 
                 // マテリアル設定準備
@@ -108,6 +109,7 @@ public class Tex : MonoBehaviour
                 matCom.Main = main;
                 matCom.Shade = shade;
                 matCom.Outline = outline;
+                matCom.Toggle = toggle;
                 matCom.Dropdown = type;
 
                 // UIの初期表示設定取得
@@ -118,6 +120,7 @@ public class Tex : MonoBehaviour
                 main.color = mat.HasProperty("_Color") ? mat.GetColor("_Color") : Color.white;
                 shade.color = mat.HasProperty("_ShadeColor") ? mat.GetColor("_ShadeColor") : Color.white;
                 outline.color = mat.HasProperty("_OutlineColor") ? mat.GetColor("_OutlineColor") : Color.white;
+                toggle.isOn = mat.shader == Shader.Find("VRM/MToon");
                 type.value = (int)GetBlendMode(mat);
 
                 // マテリアル設定UIの取得
@@ -128,6 +131,7 @@ public class Tex : MonoBehaviour
                 mainBtn.onClick.AddListener(matCom.SetMainColor);
                 shadeBtn.onClick.AddListener(matCom.SetShadeColor);
                 outlineBtn.onClick.AddListener(matCom.SetOutlineColor);
+                toggle.onValueChanged.AddListener(matCom.SetShader);
                 type.onValueChanged.AddListener(matCom.SetRenderingType);
             }
         }

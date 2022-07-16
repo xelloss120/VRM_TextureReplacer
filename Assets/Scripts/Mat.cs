@@ -14,6 +14,8 @@ public class Mat : MonoBehaviour
     public Image Main;
     public Image Shade;
     public Image Outline;
+
+    public Toggle Toggle;
     public Dropdown Dropdown;
 
     /// <summary>
@@ -84,6 +86,21 @@ public class Mat : MonoBehaviour
     public void SetOutlineColor()
     {
         Material.SetColor("_OutlineColor", Outline.color);
+    }
+
+    /// <summary>
+    /// シェーダーの設定
+    /// </summary>
+    public void SetShader(bool isOn)
+    {
+        if (isOn)
+        {
+            Material.shader = Shader.Find("VRM/MToon");
+        }
+        else
+        {
+            Material.shader = Shader.Find("Standard");
+        }
     }
 
     enum RenderMode
