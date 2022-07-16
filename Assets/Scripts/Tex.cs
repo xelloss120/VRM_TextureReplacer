@@ -98,8 +98,9 @@ public class Tex : MonoBehaviour
                 var main = prefab.transform.Find("MainUI/MainColor").GetComponent<Image>();
                 var shade = prefab.transform.Find("MainUI/ShadeColor").GetComponent<Image>();
                 var outline = prefab.transform.Find("MainUI/OutlineColor").GetComponent<Image>();
+                var type = prefab.transform.Find("MainUI/Dropdown").GetComponent<Dropdown>();
 
-                // マテリアル編集準備
+                // マテリアル設定準備
                 var matCom = prefab.GetComponent<Mat>();
                 matCom.Path = System.IO.Path.GetDirectoryName(Path) + "/";
                 matCom.Material = mat;
@@ -107,8 +108,9 @@ public class Tex : MonoBehaviour
                 matCom.Main = main;
                 matCom.Shade = shade;
                 matCom.Outline = outline;
+                matCom.Dropdown = type;
 
-                // UIの初期表示設定
+                // UIの初期表示設定取得
                 image.texture = tex;
                 name.text = mat.name;
                 export.onClick.AddListener(matCom.Export);
@@ -116,8 +118,9 @@ public class Tex : MonoBehaviour
                 main.color = mat.HasProperty("_Color") ? mat.GetColor("_Color") : Color.white;
                 shade.color = mat.HasProperty("_ShadeColor") ? mat.GetColor("_ShadeColor") : Color.white;
                 outline.color = mat.HasProperty("_OutlineColor") ? mat.GetColor("_OutlineColor") : Color.white;
+                type.value = (int)GetBlendMode(mat);
 
-                // 色設定UIの取得
+                // マテリアル設定UIの取得
                 var mainBtn = prefab.transform.Find("MainRGB/Set").GetComponent<Button>();
                 var shadeBtn = prefab.transform.Find("ShadeRGB/Set").GetComponent<Button>();
                 var outlineBtn = prefab.transform.Find("OutlineRGB/Set").GetComponent<Button>();
@@ -125,6 +128,7 @@ public class Tex : MonoBehaviour
                 mainBtn.onClick.AddListener(matCom.SetMainColor);
                 shadeBtn.onClick.AddListener(matCom.SetShadeColor);
                 outlineBtn.onClick.AddListener(matCom.SetOutlineColor);
+                type.onValueChanged.AddListener(matCom.SetRenderingType);
             }
         }
     }
@@ -184,5 +188,50 @@ public class Tex : MonoBehaviour
 
         // 重複を削除
         return list.Distinct().ToArray();
+    }
+
+    enum RenderMode
+    {
+        Opaque = 0,
+        Cutout = 1,
+        Transparent = 2,
+        TransparentWithZWrite = 3,
+    }
+    public const string KeyAlphaTestOn = "_ALPHATEST_ON";
+    public const string KeyAlphaBlendOn = "_ALPHABLEND_ON";
+    public const string PropZWrite = "_ZWrite";
+    public const int DisabledIntValue = 0;
+    public const int EnabledIntValue = 1;
+
+    /// <summary>
+    /// レンダリングタイプの取得
+    /// </summary>
+    /// <remarks>
+    /// .\VRMShaders\VRM\MToon\MToon\Scripts\Utils.cs
+    /// .\VRMShaders\VRM\MToon\MToon\Scripts\UtilsGetter.cs
+    /// </remarks>
+    private static RenderMode GetBlendMode(Material material)
+    {
+        if (material.IsKeywordEnabled(KeyAlphaTestOn))
+        {
+            return RenderMode.Cutout;
+        }
+        else if (material.IsKeywordEnabled(KeyAlphaBlendOn))
+        {
+            switch (material.GetInt(PropZWrite))
+            {
+                case EnabledIntValue:
+                    return RenderMode.TransparentWithZWrite;
+                case DisabledIntValue:
+                    return RenderMode.Transparent;
+                default:
+                    Debug.LogWarning("Invalid ZWrite Int Value.");
+                    return RenderMode.Transparent;
+            }
+        }
+        else
+        {
+            return RenderMode.Opaque;
+        }
     }
 }
